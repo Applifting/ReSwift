@@ -14,28 +14,28 @@
 ///
 /// The box subscribes either to the original subscription, or if available to the transformed
 /// subscription and passes any values that come through this subscriptions to the subscriber.
-class SubscriptionBox<State>: Hashable {
+public class SubscriptionBox<State>: Hashable {
 
-    private let originalSubscription: Subscription<State>
-    weak var subscriber: AnyStoreSubscriber?
-    private let objectIdentifier: ObjectIdentifier
+    public let originalSubscription: Subscription<State>
+    public internal(set) weak var subscriber: AnyStoreSubscriber?
+    public let objectIdentifier: ObjectIdentifier
 
     #if swift(>=5.0)
-        func hash(into hasher: inout Hasher) {
+        public func hash(into hasher: inout Hasher) {
             hasher.combine(self.objectIdentifier)
         }
     #elseif swift(>=4.2)
         #if compiler(>=5.0)
-            func hash(into hasher: inout Hasher) {
+            public func hash(into hasher: inout Hasher) {
                 hasher.combine(self.objectIdentifier)
             }
         #else
-            var hashValue: Int {
+            public var hashValue: Int {
                 return self.objectIdentifier.hashValue
             }
         #endif
     #else
-        var hashValue: Int {
+        public var hashValue: Int {
             return self.objectIdentifier.hashValue
         }
     #endif
@@ -71,7 +71,7 @@ class SubscriptionBox<State>: Hashable {
         self.originalSubscription.newValues(oldState: oldState, newState: newState)
     }
 
-    static func == (left: SubscriptionBox<State>, right: SubscriptionBox<State>) -> Bool {
+    public static func == (left: SubscriptionBox<State>, right: SubscriptionBox<State>) -> Bool {
         return left.objectIdentifier == right.objectIdentifier
     }
 }
